@@ -1,0 +1,25 @@
+{
+  "name": "mongo-db-migration",
+  "version": "1.0.0",
+  "description": "mongo db migration node script",
+  "main": "migrate-data.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ace1122sp/mongo-db-migration.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ace1122sp/mongo-db-migration/issues"
+  },
+  "homepage": "https://github.com/ace1122sp/mongo-db-migration#readme",
+  "dependencies": {
+    "async": "2.6.0",
+    "mongodb": "3.0.4"
+  }
+}
