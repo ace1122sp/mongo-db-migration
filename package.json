@@ -1,6 +1,6 @@
 {
   "name": "mongo-db-migration",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "mongo db migration node script",
   "main": "migrate-data.js",
   "scripts": {
