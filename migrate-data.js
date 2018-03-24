@@ -13,7 +13,10 @@ const migrateData = numberOfQueries => {
   const allObjects = mergeAllObjects(data, addressData);
 
   MongoClient.connect(url, (error, client) => {
-    if(error) return process.exit(1);
+    if(error) {
+      console.error(error);
+      return process.exit(1);
+    }
     let queries = [],
         queryNum = 0,
         pointerObjs = 0,
@@ -26,8 +29,8 @@ const migrateData = numberOfQueries => {
         pointerObjs++;
       }
       let newQuery = async function(){
-        console.log('finished query', i+1);
         insertDocuments(client, [...tempDocs]);
+        console.log('called query', i+1);
       }
       queries.push(newQuery);
       queryNum++;
@@ -41,3 +44,4 @@ const migrateData = numberOfQueries => {
 }
 
 migrateData(process.argv[2]);
+module.exports = migrateData;
