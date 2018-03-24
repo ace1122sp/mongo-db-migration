@@ -25,7 +25,7 @@ const migrateData = numberOfQueries => {
         tempDocs.push(allObjects[pointerObjs]);
         pointerObjs++;
       }
-      let newQuery = () => {
+      let newQuery = async function(){
         console.log('finished query', i+1);
         insertDocuments(client, [...tempDocs]);
       }
@@ -35,7 +35,7 @@ const migrateData = numberOfQueries => {
 
     parallel(queries, (err, res) => {
       if(err) return console.log(err);
-      console.log('ok');
+      console.log('all queries executed');
     });
   });
 }
