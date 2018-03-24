@@ -5,7 +5,5 @@ module.exports = (client, docs) => {
       console.log('error in inserting:', err);
       return process.exit(1);
     }
-    console.log('successfully inserted');
-    client.close();
   });
 }

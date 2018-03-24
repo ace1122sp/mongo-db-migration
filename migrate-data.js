@@ -35,13 +35,16 @@ const migrateData = numberOfQueries => {
       queries.push(newQuery);
       queryNum++;
     }
-
+    console.log(`Launching ${numberOfQueries} parallel task(s)...`);
+    const startTime = Date.now();
     parallel(queries, (err, res) => {
       if(err) return console.log(err);
+      const endTime = Date.now();
+      console.log(`execution time: ${endTime - startTime}`)
       console.log('all queries executed');
+      client.close();
     });
   });
 }
 
 migrateData(process.argv[2]);
-module.exports = migrateData;
