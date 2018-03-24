@@ -40,12 +40,4 @@ const migrateData = numberOfQueries => {
   });
 }
 
-// migrateData(process.argv[2]);
-
-parallel([
-  () => console.log('Palo Alto'),
-  () => console.log('California')
-], (e, r) => {
-  if(e) console.log(e);
-  console.log('success');
-})
+migrateData(process.argv[2]);
