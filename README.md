@@ -4,5 +4,5 @@ mongo db migration node script
 ## Use
 in terminal
 ```
-node migrate-data.js <number-of-queries-to-insert-data-to-db> 
+node migrate-data.js <number-of-objects-to-insert-in-one-query> 
 ```
