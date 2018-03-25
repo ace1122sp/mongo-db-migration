@@ -5,13 +5,14 @@ const addressData = require('./m3-customer-address-data');
 const mergeAllObjects = require('./helpers/merge.js');
 const insertDocuments = require('./helpers/insertDocuments');
 
-const migrateData = numberOfObjectsInBatch => {
+const migrateData = numberOfObjectsInABatch => {
+  const batchSize = parseInt(numberOfObjectsInABatch);
   const url = 'mongodb://localhost:27017/customer-db';
   const allObjects = mergeAllObjects(data, addressData);
   const dataLength = data.length;
-  let numberOfQueries = Math.floor(dataLength / numberOfObjectsInBatch);
-  const lastQuerySize = dataLength - numberOfQueries * numberOfObjectsInBatch;
-  // if(lastQuerySize) numberOfQueries++;
+  let numberOfQueries = Math.floor(dataLength / batchSize);
+  const lastQuerySize = dataLength - numberOfQueries * batchSize;
+  if(lastQuerySize) numberOfQueries++;
 
   MongoClient.connect(url, (error, client) => {
     if(error) {
@@ -23,38 +24,14 @@ const migrateData = numberOfObjectsInBatch => {
 
     // query functions factory
     for(let i = 0, tempDocs = []; i < numberOfQueries; i++, tempDocs = []) {
-      for(let y = 0; y < numberOfObjectsInBatch; y++) {
-        tempDocs.push(allObjects[pointerObjs]);
-        pointerObjs++;
-      }
-      let newQuery = async function(){
+      tempDocs = allObjects.slice(pointerObjs, pointerObjs + batchSize);
+      let newQuery = async function() {
         insertDocuments(client, [...tempDocs]);
         console.log('called query', i+1);
       }
       queries.push(newQuery);
+      pointerObjs += batchSize;
     }
-    if(lastQuerySize>0) {
-      let tempDocs = [];
-      for(let i = 0; i < lastQuerySize; i++) {
-        tempDocs.push(allObjects[pointerObjs])
-        pointerObjs++;
-      }
-      let newQuery = async function() {
-        insertDocuments(client, [...tempDocs]);
-        console.log('called query', numberOfQueries + 1);
-      }
-      queries.push(newQuery);
-    }
-
-    // for(let i = 0, tempDocs = []; i < numberOfQueries; i++, tempDocs = []) {
-    //   tempDocs = allObjects.slice(pointerObjs, pointerObjs + parseInt(numberOfObjectsInBatch));
-    //   let newQuery = async function() {
-    //     insertDocuments(client, [...tempDocs]);
-    //     console.log('called query', i+1);
-    //   }
-    //   queries.push(newQuery);
-    //   pointerObjs += numberOfObjectsInBatch;
-    // }
 
     console.log(`Launching ${numberOfQueries} parallel task(s)...`);
     const startTime = Date.now();
