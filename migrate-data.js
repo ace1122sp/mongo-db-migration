@@ -10,9 +10,7 @@ const migrateData = numberOfObjectsInABatch => {
   const url = 'mongodb://localhost:27017/customer-db';
   const allObjects = mergeAllObjects(data, addressData);
   const dataLength = data.length;
-  let numberOfQueries = Math.floor(dataLength / batchSize);
-  const lastQuerySize = dataLength - numberOfQueries * batchSize;
-  if(lastQuerySize) numberOfQueries++;
+  let numberOfQueries = Math.ceil(dataLength / batchSize);
 
   MongoClient.connect(url, (error, client) => {
     if(error) {
